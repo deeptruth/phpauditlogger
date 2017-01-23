@@ -1,0 +1,14 @@
+{
+    "name": "deeptruth/phpauditlogger",
+    "description": "A laravel package for audit trails",
+    "type": "package",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aaron Tolentino",
+            "email": "aarontolentino123@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
