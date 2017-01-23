@@ -14,10 +14,13 @@ class AuditLogServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-        $this->publishes([
-            __DIR__.'/Config/auditlog.php' => config_path('auditlog.php'),
-        ], 'config');
+        // $this->publishes([
+        //     __DIR__.'/Config/auditlog.php' => config_path('auditlog.php'),
+        // ], 'config');
 
+        $this->publishes([
+            __DIR__.'/Migration/' => database_path('migrations')
+        ], 'migrations');
         
         $this->app['auditlog'] = $this->app->share(function($app) {
             return new AuditLog;
@@ -32,8 +35,8 @@ class AuditLogServiceProvider extends ServiceProvider
     public function register()
     {
         //
-         // Config
-        $this->mergeConfigFrom( __DIR__.'/Config/auditlog.php', 'auditlog');
+        // Config
+        // $this->mergeConfigFrom( __DIR__.'/Config/auditlog.php', 'auditlog');
 
         $this->app['auditlog'] = $this->app->share(function($app) {
             return new AuditLog;

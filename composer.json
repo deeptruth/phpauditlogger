@@ -3,6 +3,7 @@
     "description": "A laravel package for audit trails",
     "type": "package",
     "license": "MIT",
+    "keywords": ["laravel"],
     "authors": [
         {
             "name": "Aaron Tolentino",
@@ -10,5 +11,10 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {}
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Deeptruth\\PhpAuditLogger\\": "/src"
+        }
+    }
 }
