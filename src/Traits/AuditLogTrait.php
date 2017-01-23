@@ -28,7 +28,9 @@ trait AuditLogTrait {
 
     /**
      * Set log parameters and check if user_id is null(for CLI)
-     * 
+     *
+     * @param string $description
+     * @param int $user_id
      * @return boolean
      */
 
@@ -44,7 +46,7 @@ trait AuditLogTrait {
             }
         }
 
-        $this->save_log();
+        return $this->save_log();
     }
 
     /**
