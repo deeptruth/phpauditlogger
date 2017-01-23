@@ -1,4 +1,4 @@
-#Welcome to Audit Logger Package
+#Welcome to Laravel Audit Logger Package
 
 See the [WIKI](https://github.com/deeptruth/phpauditlogger/wiki) for documentation
 
