@@ -108,8 +108,11 @@ trait AuditLogTrait {
         return parent::save($options);
     }
 
-
-
+    /**
+     * [removeHidden remove hidden fields in old and new value]
+     * @param  [Array] $data    [fields in database]
+     * @return [Array]          [removed hidden fields in database]
+     */
     private function removeHidden($data){
         $return_data = array();
         foreach ($data as $key => $value) { 
