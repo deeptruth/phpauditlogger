@@ -8,30 +8,52 @@ use Illuminate\Support\Facades\Auth;
 trait AuditLogTrait {
     
     /**
-     * Description of log
+     * [Description of log]
      *
-     * @var string
+     * @var [String]
      */
     protected $description;
 
 
     /**
-     * Description of user id
+     * [user id of user who performed this action]
      *
-     * Corresponds to driver name in authentication configuration.
-     *
-     * @var int
+     * @var [int]
      */
 
     protected $user_id;
 
+    /**
+     * [Check if the use wants to log old and new value]
+     *
+     * @var [boolean]
+     */
+    public $log_old_new_value = false;
+
 
     /**
-     * Set log parameters and check if user_id is null(for CLI)
+     * [Old value of data]
+     * 
+     * [$old_value description]
+     * @var [String]
+     */
+    protected $old_value = "";
+
+    /**
+     * [New value of data]
+     * 
+     * [$new_value description]
+     * @var [String]
+     */
+    protected $new_value = "";
+
+
+    /**
+     * [log Set log parameters and check if user_id is null(for CLI)]
      *
-     * @param string $description
-     * @param int $user_id
-     * @return boolean
+     * @param [String $description] [description of log]
+     * @param [int $user_id]        [customized user id of user who performed this action]
+     * @return [boolean]
      */
 
     public function log($description, $user_id = null){
@@ -46,23 +68,25 @@ trait AuditLogTrait {
             }
         }
 
-        return $this->save_log();
+        return $this->saveLog();
     }
 
     /**
-     * Log the specifc action
+     * [saveLog Log the specifc action]
      * 
-     * @return boolean
+     * @return [boolean]
      */
 
-    public function save_log(){
+    private function saveLog(){
         $audit_log = new AuditLogModel();
         $audit_log->user_id = $this->user_id;
         $audit_log->record_id = $this->attributes['id'];
         $audit_log->description = $this->description;
-
+        $audit_log->old_value = $this->old_value==""?"":json_encode($this->old_value);
+        $audit_log->new_value = $this->new_value==""?"":json_encode($this->new_value);
         return $audit_log->save();
     }
+
 
     /**
      * Save data to the database.
@@ -70,9 +94,17 @@ trait AuditLogTrait {
      * @param  array  $options
      * @return bool
      */
-    // public function save(array $options = [])
-    // {
-    //     // do some stuff here later like get old value or something for now save the log
-    //     parent::save($options);
-    // }
+    public function save(array $options = [])
+    {
+        if($this->log_old_new_value === true){
+            if($this->exists){
+                $this->old_value = $this->original;       
+                $this->new_value = $this->attributes;       
+            }else{
+                throw new \Exception("Data must exist if you want to log old and new value", 1);
+            }
+        }
+        // do some stuff here later like get old value or something for now save the log
+        return parent::save($options);
+    }
 }
