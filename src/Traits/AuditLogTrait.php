@@ -82,8 +82,8 @@ trait AuditLogTrait {
         $audit_log->user_id = $this->user_id;
         $audit_log->record_id = $this->attributes['id'];
         $audit_log->description = $this->description;
-        $audit_log->old_value = $this->old_value==""?"":json_encode($this->old_value);
-        $audit_log->new_value = $this->new_value==""?"":json_encode($this->new_value);
+        $audit_log->old_value = $this->old_value== "" ? "" : json_encode($this->old_value);
+        $audit_log->new_value = $this->new_value== "" ? "" : json_encode($this->new_value);
         return $audit_log->save();
     }
 
@@ -98,13 +98,25 @@ trait AuditLogTrait {
     {
         if($this->log_old_new_value === true){
             if($this->exists){
-                $this->old_value = $this->original;       
-                $this->new_value = $this->attributes;       
+                $this->old_value = $this->removeHidden($this->original);
+                $this->new_value = $this->removeHidden($this->attributes);
             }else{
                 throw new \Exception("Data must exist if you want to log old and new value", 1);
             }
         }
         // do some stuff here later like get old value or something for now save the log
         return parent::save($options);
+    }
+
+
+
+    private function removeHidden($data){
+        $return_data = array();
+        foreach ($data as $key => $value) { 
+            if(!in_array($key, $this->hidden)){
+                $return_data[$key] = $value;
+            }
+        }
+        return $return_data;
     }
 }
